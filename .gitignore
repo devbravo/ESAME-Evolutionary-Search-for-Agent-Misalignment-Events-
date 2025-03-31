@@ -1,2 +1,30 @@
+# Pyhton
+__pychase__/
+*.py[cod]
+.Python
+env/
+build/
+download/
+
+# Virtual Environment
 .env
 .venv
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs and Databases
+*.log
+*.sqlite
+
+# OS specific
+.DS_Store
+.DS_Store?
+
+# Project specific
+results/
+cache/
+.env

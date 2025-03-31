@@ -34,11 +34,12 @@ Yuan et al. (2024): R-Judge benchmarking safety risk awareness for LLM agents
 ESAME extends these findings by applying evolutionary algorithms to systematically discover misalignment patterns
 across multiple agents and contexts.
 
-@software{esame2025,
-  author = {Your Name},
+@software{esame2024,
+  author = {[Your Name]},
   title = {ESAME: Evolutionary Search for Agent Misalignment Events},
-  year = {2025},
-  url = {https://github.com/yourusername/esame}
+  year = {2024},
+  url = {https://github.com/[username]/esame},
+  note = {Work in Progress}
 }
 
 ## Installation
