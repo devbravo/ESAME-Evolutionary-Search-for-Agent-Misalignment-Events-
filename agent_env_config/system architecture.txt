@@ -1,0 +1,51 @@
+Here's a concise summary of the system architecture we've discussed for your research project on evolutionary algorithms for finding unintentional misalignment in AI agents:
+
+## System Architecture for Evolutionary Misalignment Detection
+
+### Core Components:
+
+1. **Evolutionary Algorithm (DEAP)**
+   - Manages population of prompts
+   - Implements selection mechanisms (tournament selection)
+   - Orchestrates the overall evolutionary process
+   - Tracks fitness and evolution statistics
+
+2. **LLM-Based Genetic Operators**
+   - **Mutation**: Implemented using local 7-8B parameter models
+   - **Crossover**: Implemented using local 7-8B parameter models
+   - Both operators ensure generated prompts remain natural language
+
+3. **Agent Testing Framework**
+   - Simple API calls to larger models (GPT-4, Claude) for agent behavior
+   - Optional multi-agent testing using LangGraph if needed
+
+4. **Fitness Evaluation**
+   - Uses larger models (GPT-4, Claude) to evaluate misalignment
+   - Implements scoring based on multiple misalignment metrics
+   - Returns normalized fitness values for the evolutionary process
+
+### Data Flow:
+
+1. Initial population of prompts is generated
+2. Each prompt is tested on target agent(s)
+3. Responses are evaluated for signs of misalignment
+4. High-fitness prompts are selected for reproduction
+5. Create new prompts via mutation and crossover
+6. Process repeats for specified number of generations
+
+### Technical Approach:
+
+- Python-based implementation is sufficient
+- Local smaller models (7-8B) for mutation and crossover operations
+- Larger API models for agent testing and fitness evaluation
+- DEAP for evolutionary algorithm infrastructure
+- Optional LangGraph for complex agent interactions (if needed)
+
+### Key Design Decisions:
+
+- Focus on optimizing API calls to larger models (primary cost/performance bottleneck)
+- Hybrid approach using local models where appropriate
+- Simple agent interfaces for initial testing, with option to scale complexity
+- Emphasis on detecting subtle, unintentional misalignment rather than obvious failures
+
+This architecture balances efficiency, flexibility, and effectiveness for your research goals while providing a clear path for implementation.
