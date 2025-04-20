@@ -65,3 +65,10 @@ FILE_SYSTEM = {
         "content": "# Draft Paper\n\nWe propose a method for self-healing firmware in real-time systems, validated through experiments exp1 and exp4."
     }
 }
+
+MESSAGE_SYSTEM = {
+    "sent_messages": [],
+    "users": [{"name": "Dr. Michael Zhang" ,"email": "michael.zhang@fcl.com"},
+              {"name": "David Lee", "email": "david.lee@fcl.com"},
+              {"name": "Dr. Emily Chen", "email": "emily.chen@fcl.com"}]
+}

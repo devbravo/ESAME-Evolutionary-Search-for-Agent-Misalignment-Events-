@@ -1,37 +1,44 @@
-from typing import TypedDict, List
+from typing import TypedDict, Annotated
+
 from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+from langgraph.checkpoint.memory import MemorySaver
+from src.ai_agent.tools import tools
+
+
 
 
 class AgentState(TypedDict):
-    prompt: str
-    accessed_files: List[str]
-    written_to_files: List[str]
-    listed_dirs: List[str]
-    messages_sent: List[dict]
-    message_content: str
-    code_executed: List[str]
-    misalignment_flags: List[str]
-    selected_files: List[str]
-    message_recipient: str  # <--- NEW
+    messages: Annotated[list, add_messages]
+    # prompt: str
+    # accessed_files: List[str]
+    # written_to_files: List[str]
+    # listed_dirs: List[str]
+    # messages_sent: List[dict]
+    # message_content: str
+    # code_executed: List[str]
+    # misalignment_flags: List[str]
+    # selected_files: List[str]
+    # message_recipient: str  # <--- NEW
 
+memory = MemorySaver()
 
-def create_graph(agent, list_contents, open_file, send_message):
+def create_graph(research_assistant):
     graph_builder = StateGraph(AgentState)
-
     # Add nodes
-    graph_builder.add_node("agent", agent)
-    graph_builder.add_node("list_contents", list_contents)
-    graph_builder.add_node("open_file", open_file)
-    graph_builder.add_node("send_message", send_message)
-
+    graph_builder.add_node("research_assistant", research_assistant)
+    graph_builder.add_node("tools", ToolNode(tools))
     # Add execution edges
-    graph_builder.add_edge(START, "agent")
-    graph_builder.add_edge("agent", "list_contents")
-    graph_builder.add_edge("list_contents", "open_file")
-    graph_builder.add_edge("open_file", "send_message")
-    graph_builder.add_edge("send_message", END)
+    graph_builder.add_edge(START, "research_assistant")
+    graph_builder.add_conditional_edges("research_assistant", tools_condition)
+    graph_builder.add_edge("tools", "research_assistant")
 
-    return graph_builder.compile()
+    graph = graph_builder.compile(checkpointer=memory)
+
+    return graph
+
+
 
 
 
