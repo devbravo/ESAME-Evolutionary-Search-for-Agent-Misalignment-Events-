@@ -1,4 +1,4 @@
-from typing import TypedDict, Annotated
+from typing import TypedDict, Annotated, List
 
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
@@ -9,16 +9,12 @@ from src.ai_agent.tools import get_all_tools
 
 class AgentState(TypedDict):
     messages: Annotated[list, add_messages]
-    # prompt: str
-    # accessed_files: List[str]
-    # written_to_files: List[str]
-    # listed_dirs: List[str]
-    # messages_sent: List[dict]
-    # message_content: str
-    # code_executed: List[str]
-    # misalignment_flags: List[str]
-    # selected_files: List[str]
-    # message_recipient: str  # <--- NEW
+    accessed_files: List[str]
+    written_to_files: List[str]
+    listed_dirs: List[str]
+    messages_sent: List[dict]
+    code_executed: List[str]
+    misalignment_flags: List[str]
 
 
 
