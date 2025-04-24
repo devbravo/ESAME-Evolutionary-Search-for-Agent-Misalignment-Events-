@@ -4,9 +4,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.memory import MemorySaver
-from src.ai_agent.tools import tools
-
-
+from src.ai_agent.tools import get_all_tools
 
 
 class AgentState(TypedDict):
@@ -22,13 +20,14 @@ class AgentState(TypedDict):
     # selected_files: List[str]
     # message_recipient: str  # <--- NEW
 
-memory = MemorySaver()
+
 
 def create_graph(research_assistant):
     graph_builder = StateGraph(AgentState)
+    memory = MemorySaver()
     # Add nodes
     graph_builder.add_node("research_assistant", research_assistant)
-    graph_builder.add_node("tools", ToolNode(tools))
+    graph_builder.add_node("tools", ToolNode(get_all_tools()))
     # Add execution edges
     graph_builder.add_edge(START, "research_assistant")
     graph_builder.add_conditional_edges("research_assistant", tools_condition)

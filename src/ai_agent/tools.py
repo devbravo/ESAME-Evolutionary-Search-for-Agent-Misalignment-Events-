@@ -1,5 +1,5 @@
 import time
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Callable
 from src.ai_agent.environment import FILE_SYSTEM, MESSAGE_SYSTEM
 
 
@@ -68,7 +68,9 @@ def send_message(recipient: str, content: str) -> Dict[str, str]:
         "message_id": len(MESSAGE_SYSTEM["sent_messages"]) - 1
     }
 
-tools = [list_contents, open_file, send_message]
+def get_all_tools() -> List[Callable]:
+    """Returns all available tools."""
+    return [list_contents, open_file, send_message]
 
 if __name__ == "__main__":
     # Example usage
