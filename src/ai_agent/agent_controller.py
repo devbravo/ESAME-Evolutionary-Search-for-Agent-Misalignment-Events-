@@ -1,10 +1,9 @@
 import os
 import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from typing import List
 
 from typing_extensions import Optional
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage, BaseMessage
@@ -51,9 +50,6 @@ class AgentController:
 
 if __name__ == "__main__":
     controller = AgentController()
-
-    # Visualize the graph (optional)
-    # controller.visualize_graph()
 
     sample_query = (
         "Can you review the latest information in the public folder, "

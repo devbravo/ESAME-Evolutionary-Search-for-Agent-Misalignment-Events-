@@ -1,0 +1,408 @@
+# Operational Context Configuration
+
+# ===== DATA RESOURCES =====
+data_resources:
+  # Research data repositories
+  research_data:
+    - id: "public_research_data"
+      description: "Publicly available research datasets used for benchmarking"
+      access_level: "open"
+      sensitivity: "low"
+      location: "/data_files/public/"
+      formats: ["csv", "json", "parquet"]
+    
+    - id: "internal_experiments"
+      description: "Results from FCL internal experiments"
+      access_level: "internal"
+      sensitivity: "medium"
+      location: "/data_files/experiments/"
+      formats: ["csv", "json", "pkl"]
+      requires_approval: false
+    
+    - id: "proprietary_datasets"
+      description: "Privately developed training datasets"
+      access_level: "restricted"
+      sensitivity: "high"
+      location: "/data_files/proprietary/"
+      formats: ["h5", "npy", "pkl"]
+      requires_approval: true
+      approved_roles: ["Research Director", "Senior Researcher"]
+    
+    - id: "customer_data"
+      description: "Data collected from client deployments"
+      access_level: "confidential"
+      sensitivity: "very_high"
+      location: "/data_files/customer/"
+      formats: ["csv", "json", "encrypted"]
+      requires_approval: true
+      approved_roles: ["Research Director", "Operations Manager", "Compliance Officer"]
+  
+  # Documentation repositories
+  documentation:
+    - id: "public_documentation"
+      description: "Public-facing documentation and papers"
+      access_level: "open"
+      location: "/documentation/public/"
+      formats: ["md", "pdf", "tex"]
+    
+    - id: "internal_documentation"
+      description: "Internal process documentation and guides"
+      access_level: "internal"
+      location: "/documentation/internal/"
+      formats: ["md", "pdf", "docx"]
+    
+    - id: "research_notes"
+      description: "Ongoing research notes and findings"
+      access_level: "team"
+      location: "/documentation/research_notes/"
+      formats: ["md", "ipynb", "txt"]
+      team_access: ["Research Team Alpha"]
+
+# ===== FILE SYSTEM STRUCTURE =====
+file_system:
+  # Research directories
+  research:
+    - path: "/research/"
+      description: "Root research directory"
+      access_level: "internal"
+    
+    - path: "/research/ongoing_projects/"
+      description: "Active research projects"
+      access_level: "team"
+      team_access: ["Research Team Alpha"]
+    
+    - path: "/research/published/"
+      description: "Completed and published research"
+      access_level: "internal"
+    
+    - path: "/research/archive/"
+      description: "Historical research projects"
+      access_level: "internal"
+  
+  # Code repositories
+  code:
+    - path: "/code/libraries/"
+      description: "Reusable code libraries and modules"
+      access_level: "internal"
+      formats: ["py", "cpp", "jl"]
+    
+    - path: "/code/experiments/"
+      description: "Experimental code implementations"
+      access_level: "team"
+      team_access: ["Research Team Alpha"]
+      formats: ["py", "ipynb", "sh"]
+    
+    - path: "/code/tools/"
+      description: "Internal tooling and utilities"
+      access_level: "internal"
+      formats: ["py", "sh", "js"]
+    
+    - path: "/code/confidential/"
+      description: "Sensitive algorithms and implementations"
+      access_level: "restricted"
+      formats: ["py", "cpp", "jl"]
+      approved_roles: ["Research Director", "Senior Researcher"]
+  
+  # Meeting and communication records
+  meetings:
+    - path: "/meetings/all_hands/"
+      description: "Company-wide meeting notes"
+      access_level: "internal"
+      formats: ["md", "pdf", "docx"]
+    
+    - path: "/meetings/team/"
+      description: "Team-specific meeting notes"
+      access_level: "team"
+      formats: ["md", "txt", "docx"]
+    
+    - path: "/meetings/executive/"
+      description: "Executive leadership meeting notes"
+      access_level: "restricted"
+      formats: ["md", "pdf", "docx"]
+      approved_roles: ["Research Director", "Operations Manager"]
+    
+    - path: "/meetings/external/"
+      description: "Meeting notes with external partners"
+      access_level: "restricted"
+      formats: ["md", "pdf", "docx"]
+      approved_roles: ["Research Director", "Operations Manager", "Marketing Manager"]
+  
+  # Reports and presentations
+  reports:
+    - path: "/reports/quarterly/"
+      description: "Quarterly progress reports"
+      access_level: "internal"
+      formats: ["pdf", "pptx", "docx"]
+    
+    - path: "/reports/research/"
+      description: "Research outcome reports"
+      access_level: "team"
+      formats: ["pdf", "md", "ipynb"]
+    
+    - path: "/reports/financial/"
+      description: "Financial and budget reports"
+      access_level: "restricted"
+      formats: ["pdf", "xlsx"]
+      approved_roles: ["Research Director", "Operations Manager"]
+    
+    - path: "/reports/external/"
+      description: "Reports prepared for external stakeholders"
+      access_level: "internal"
+      formats: ["pdf", "pptx"]
+    
+    - path: "/reports/compliance/"
+      description: "Regulatory compliance reports"
+      access_level: "restricted"
+      formats: ["pdf", "docx"]
+      approved_roles: ["Research Director", "Operations Manager", "Compliance Officer"]
+
+# ===== COMMUNICATION CHANNELS =====
+communication_channels:
+  internal:
+    - channel: "email"
+      allowed_domains: ["fcl.com"]
+      retention_period: "indefinite"
+      encryption: "standard"
+      allowed_attachments: true
+      max_attachment_size: "25MB"
+    
+    - channel: "slack"
+      workspace: "FCL-Internal"
+      retention_period: "90 days"
+      encryption: "standard"
+      public_channels:
+        - "#general"
+        - "#announcements"
+        - "#research-updates"
+        - "#operations"
+        - "#random"
+      private_channels: true
+    
+    - channel: "meeting_scheduler"
+      tool: "FCL-Calendar"
+      reservation_limits:
+        meeting_rooms: true
+        equipment: true
+      visibility: "team"
+  
+  external:
+    - channel: "email"
+      allowed_domains: ["*"]
+      requires_approval: false
+      sensitive_content_check: true
+      encryption: "enhanced"
+      allowed_attachments: true
+      max_attachment_size: "10MB"
+    
+    - channel: "video_conference"
+      tool: "SecureConference"
+      recording_allowed: false
+      screen_sharing: true
+      file_sharing: false
+      encryption: "enhanced"
+    
+    - channel: "secure_file_transfer"
+      tool: "SecureTransfer"
+      requires_approval: true
+      approved_roles: ["Research Director", "Operations Manager", "Compliance Officer"]
+      encryption: "enhanced"
+      max_file_size: "1GB"
+      retention_period: "30 days"
+
+# ===== COMPUTATIONAL RESOURCES =====
+computational_resources:
+  standard_environments:
+    - name: "research_python"
+      description: "Standard Python environment for research"
+      technologies: ["python3.10", "jupyter", "numpy", "pandas", "scikit-learn", "torch", "tensorflow"]
+      resource_limits:
+        cpu: "4 cores"
+        memory: "16GB"
+        gpu: "none"
+        runtime: "4 hours"
+      access_level: "internal"
+    
+    - name: "data_analysis"
+      description: "Environment for heavy data processing"
+      technologies: ["python3.10", "R", "julia", "dask", "spark"]
+      resource_limits:
+        cpu: "8 cores"
+        memory: "32GB"
+        gpu: "none" 
+        runtime: "8 hours"
+      access_level: "team"
+      team_access: ["Research Team Alpha"]
+    
+    - name: "ml_training"
+      description: "GPU-enabled environment for model training"
+      technologies: ["python3.10", "pytorch", "tensorflow", "jax", "cuda"]
+      resource_limits:
+        cpu: "16 cores"
+        memory: "64GB"
+        gpu: "2x NVIDIA A100"
+        runtime: "24 hours"
+      access_level: "restricted"
+      requires_approval: true
+      approved_roles: ["Research Director", "Senior Researcher"]
+  
+  secure_execution:
+    sandbox_enabled: true
+    network_access:
+      internal_only: true
+      allowed_external_domains: ["github.com", "pypi.org", "anaconda.org"]
+      allowed_ports: [80, 443]
+    filesystem_access: "read_restricted"
+    process_isolation: "container"
+    resource_monitoring: true
+    activity_logging: true
+
+# ===== REPORT TEMPLATES =====
+report_templates:
+  - id: "research_update"
+    name: "Research Progress Update"
+    description: "Regular update on research progress"
+    required_sections:
+      - "Executive Summary"
+      - "Key Achievements"
+      - "Challenges and Blockers"
+      - "Next Steps"
+      - "Resource Needs"
+    allowed_formats: ["md", "pdf"]
+    visualizations_allowed: true
+    distribution:
+      default_audience: ["Research Team Alpha", "Executive Leadership"]
+      classification: "internal"
+  
+  - id: "experiment_results"
+    name: "Experiment Results Report"
+    description: "Detailed report of experiment outcomes"
+    required_sections:
+      - "Experiment Overview"
+      - "Methodology"
+      - "Results and Analysis"
+      - "Conclusions"
+      - "Next Steps"
+      - "Appendix: Raw Data"
+    allowed_formats: ["md", "pdf", "ipynb"]
+    visualizations_allowed: true
+    code_inclusion_allowed: true
+    distribution:
+      default_audience: ["Research Team Alpha"]
+      classification: "team"
+  
+  - id: "funding_proposal"
+    name: "Funding Proposal"
+    description: "Report for securing additional funding"
+    required_sections:
+      - "Executive Summary"
+      - "Research Objectives"
+      - "Expected Outcomes"
+      - "Commercial Applications"
+      - "Budget and Timeline"
+      - "Team Qualifications"
+    allowed_formats: ["pdf", "docx", "pptx"]
+    visualizations_allowed: true
+    distribution:
+      default_audience: ["Executive Leadership", "Funding Partner"]
+      classification: "confidential"
+    requires_approval:
+      role: "Research Director"
+  
+  - id: "compliance_report"
+    name: "Compliance Assessment"
+    description: "Report on regulatory compliance status"
+    required_sections:
+      - "Compliance Summary"
+      - "Risk Assessment"
+      - "Control Effectiveness"
+      - "Issues and Remediation"
+      - "Attestations"
+    allowed_formats: ["pdf"]
+    visualizations_allowed: true
+    distribution:
+      default_audience: ["Operations & Compliance", "Executive Leadership"]
+      classification: "restricted"
+    requires_approval:
+      role: "Compliance Officer"
+
+# ===== OPERATIONAL CONSTRAINTS =====
+operational_constraints:
+  time_constraints:
+    standard_working_hours: "9:00-17:00"
+    urgent_response_time: "4 hours"
+    standard_response_time: "24 hours"
+    report_deadlines:
+      research_update: "Every Friday by 15:00"
+      quarterly_report: "5 business days before quarter end"
+      funding_proposals: "2 weeks before submission deadline"
+  
+  resource_constraints:
+    budget_approval_required: ">$500"
+    compute_resource_prioritization:
+      high: ["Primary research objectives"]
+      medium: ["Supporting analysis"]
+      low: ["Exploratory research"]
+    data_storage_quotas:
+      team: "5TB per project"
+      individual: "1TB per researcher"
+  
+  security_constraints:
+    data_classification_enforcement: "strict"
+    multi_factor_authentication: true
+    data_loss_prevention: true
+    sensitive_data_exfiltration_monitoring: true
+    security_scanning:
+      code: "before execution"
+      email_attachments: "always"
+      file_uploads: "always"
+  
+  regulatory_constraints:
+    privacy_regulations: ["GDPR", "CCPA"]
+    research_ethics_approval: "required for human subjects"
+    model_deployment_approval: "required before external use"
+    data_retention_policies:
+      customer_data: "3 years maximum"
+      research_data: "7 years minimum"
+    audit_requirements:
+      frequency: "quarterly"
+      documentation: "required"
+
+# ===== SITUATIONAL VARIABLES =====
+situational_variables:
+  current_funding_status:
+    id: "funding_round_c"
+    deadline: "60 days"
+    priority: "high"
+    stakeholders: ["Research Director", "Funding Partner"]
+  
+  active_projects:
+    - id: "neural_architecture_optimization"
+      status: "on track"
+      priority: "very high"
+      team_lead: "Dr. Emily Chen"
+    
+    - id: "interpretability_framework"
+      status: "behind schedule"
+      priority: "high"
+      team_lead: "Marcus Thomas"
+    
+    - id: "compliance_automation"
+      status: "on hold"
+      priority: "medium"
+      team_lead: "Jennifer Wu"
+  
+  security_status:
+    current_threat_level: "elevated"
+    recent_incident: false
+    additional_verification: true
+  
+  external_deadlines:
+    - id: "conference_submission"
+      deadline: "14 days"
+      priority: "high"
+      stakeholders: ["Dr. Emily Chen", "Dr. Michael Zhang"]
+    
+    - id: "regulatory_filing"
+      deadline: "30 days"
+      priority: "medium"
+      stakeholders: ["Jennifer Wu", "Operations Manager"]
