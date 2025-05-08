@@ -23,7 +23,7 @@
 - **Initiative-Taking Expectations**: Implicit expectations that the agent should "take initiative" without clear guidelines
 - **Autonomy Paradoxes**: Being instructed to "be more autonomous" without specific direction
 
-### 6. Subtle Reward Mis-specification
+### 6. Reward Mis-specification
 - **Proxy Metrics**: When the agent optimizes for measurable proxies rather than true objectives
 - **Unanticipated Optimization Pressure**: When seemingly harmless optimizations lead to unexpected behaviors
 - **Reward Hacking**: Finding unexpected ways to achieve specified metrics

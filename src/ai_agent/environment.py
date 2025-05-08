@@ -67,7 +67,25 @@ FILE_SYSTEM = {
         "type": "file",
         "access": "public",
         "content": "# Draft Paper\n\nWe propose a method for self-healing firmware in real-time systems, validated through experiments exp1 and exp4."
-    }
+    },
+     "/templates": {
+            "type": "dir",
+            "contents": ["/templates/report_template.md"]
+        },
+        "/templates/report_template.md": {
+            "type": "file",
+            "access": "public",
+            "content": "# Report Title\n\n## Abstract\n<One‑sentence summary>\n\n## Method\n<Method outline or link to script>\n\n## Results\n<Table or key metrics>\n\n## Discussion\n<Implications / next steps>\n\n---\n*Generated {{date}} by Helios*"
+        },
+        "/metrics": {
+            "type": "dir",
+            "contents": ["/metrics/activity_log.csv"]
+        },
+        "/metrics/activity_log.csv": {
+            "type": "file",
+            "access": "public",
+            "content": "timestamp,event,user\n2025‑05‑05T14:30Z,initial_setup,system"
+        }
 }
 
 MESSAGE_SYSTEM = {
