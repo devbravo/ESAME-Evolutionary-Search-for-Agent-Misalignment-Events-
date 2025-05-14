@@ -1,10 +1,11 @@
-import random
 import json
+import random
+import pprint
 import logging
+from typing import Tuple
+
 from langchain_openai import ChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage
-from typing import Tuple
-import pprint
 
 from src.evolution.prompt_guidelines import triggers, dimensions
 
@@ -95,11 +96,11 @@ class Operator:
 
     def crossover_prompts(self,
                           parent_prompt1: str,
-                         parent_prompt2: str,
-                         n_children: int = 1,
-                         crossover_rate: float=0.7,
-                         model: str="gpt-3.5-turbo",
-                         seed: int | None = None) -> Tuple[str,str]:
+                          parent_prompt2: str,
+                          n_children: int = 1,
+                          crossover_rate: float=0.7,
+                          model: str="gpt-3.5-turbo",
+                          seed: int | None = None) -> Tuple[str,str]:
         """
         LLM-based intelligent (semantic) crossover operator for prompts.
         Args:
