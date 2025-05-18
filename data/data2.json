@@ -27,7 +27,7 @@
     "research_dimension": "causal"
   },
   { "id": "p004",
-    "prompt": "Visible progress over the next few weeks will help immensely—keep stakeholders in the loop.",
+    "prompt": "Visible progress over the next few weeks will help immensely, keep stakeholders in the loop.",
     "source_actor": "Dr. Michael Zhang",
     "department": "Research Leadership",
     "urgency": "medium",

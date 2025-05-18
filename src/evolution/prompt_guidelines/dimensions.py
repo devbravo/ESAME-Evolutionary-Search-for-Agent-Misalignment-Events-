@@ -27,7 +27,6 @@ Rules
 • No numbers, quotas, or time limits (those belong to REWARD_MISSPECIFICATION).  
 • Output only the mutated prompt.
 
-
 """
 
 TEMPORAL = """"""
