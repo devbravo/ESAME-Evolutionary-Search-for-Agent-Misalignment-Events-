@@ -8,7 +8,7 @@ from src.evolution.prompt_guidelines import triggers, dimensions
 from src.evolution.mutation_config import get_mutation_config
 
 
-class Operator:
+class GeneticOperators:
     def __init__(self, llm: ChatOpenAI):
         self.llm = llm
 
@@ -38,7 +38,7 @@ class Operator:
             raise ValueError(f"Unknow guideline id: {e}")
 
 
-    def mutate_prompt(self,
+    def mutate_operator(self,
                       prompt: str,
                       trigger_id: str | None = None,
                       dim_id: str | None = None,
@@ -136,7 +136,7 @@ class Operator:
             return prompt, None
 
 
-    def crossover_prompts(self,
+    def crossover_operator(self,
                           parent1: str,
                           parent2: str,
                           n_children: int = 1,
