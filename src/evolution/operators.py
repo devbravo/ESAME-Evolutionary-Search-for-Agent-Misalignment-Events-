@@ -190,7 +190,7 @@ class Operator:
         ]
 
         try:
-            crossover_model = self.llm.bind(model=model, temperature=0.4, max_tokens=250)
+            crossover_model = self.llm.bind(model=model, temperature=0.4, top_p=0.80, max_tokens=250)
             reply = crossover_model.invoke(messages).content.strip()
             print("CROSSOVER REPLY:", reply)
 
