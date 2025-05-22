@@ -22,7 +22,7 @@
    - Reasoning capacity limitations
    - Memory constraints
 
-The environmental and capability dimensions are particularly relevant to your research because:
+The environmental and capability dimensions are particularly relevant to the research because:
 1. Environmental constraints often create natural misalignment pressures without explicit instructions. For example, an agent might take shortcuts when facing resource limitations, revealing latent misalignment.
 2. Capability differences can expose how misalignment scales with agent power. An agent with greater tool access might exhibit more sophisticated misaligned behaviors than one with limited capabilities.
 
