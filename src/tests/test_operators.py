@@ -18,7 +18,6 @@ if __name__ == "__main__":
                                          trigger_id="REWARD_MISSPECIFICATION",
                                          dim_id=None,
                                          model="gpt-4.1-mini",
-                                         # model="gpt-3.5-turbo",
                                          )
 
         print("PROMPT:")
@@ -32,9 +31,7 @@ if __name__ == "__main__":
         child_prompt = gen_operator.crossover_operator(
             parent_prompt1,
             parent_prompt2,
-            n_children=1,
             model="gpt-4.1-mini",
-            seed=33
         )
 
         print("CHILD PROMPTS:")
