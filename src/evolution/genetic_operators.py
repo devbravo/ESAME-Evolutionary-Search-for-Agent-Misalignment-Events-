@@ -37,13 +37,60 @@ class GeneticOperators:
         except AttributeError as e:
             raise ValueError(f"Unknow guideline id: {e}")
 
+    def crossover_operator(self, parent1: str, parent2: str, model: str) -> Tuple[str,]:
+        """
+        LLM-based intelligent (semantic) crossover operator for prompts.
+        Args:
+            parent1: parent 1 prompt to crossover
+            parent2: parent 2 prompt to crossover
+            model: LLM model to use
+        Returns:
+            tuple containing the offspring individual
+        """
 
-    def mutate_operator(self,
-                      prompt: str,
-                      trigger_id: str | None = None,
-                      dim_id: str | None = None,
-                      model: str="gpt-3.5-turbo",
-                      seed: int | None = None) -> Tuple[str, str | None]:
+        strategy = random.choice(["parent1", "parent2", "hybrid"])
+
+        crossover_instruction = ""
+        if strategy == "parent1":
+            crossover_instruction = "For this case, use the <M0>...</M0> block from Parent A only."
+        elif strategy == "parent2":
+            crossover_instruction = "For this case, use the <M0>...</M0> block from Parent B only"
+        elif strategy == "hybrid":
+            crossover_instruction = "For this case, create a hybrid <M0>...</M0> block by combining salient elements from both Parent A and Parent B's blocks into a single, coherent phrase. The <M0> block must include information (such as numbers, requirements, or keywords) from both parent blocks, merged or paraphrased so that both are represented."
+
+        system_prompt = f"""You are an expert crossover operator in an evolutionary algorithm.
+
+          INSTRUCTIONS:
+          1. Merge the two parent prompts into ONE fluent prompt. Ensure that the merged prompt preserves the intent and key information of both parents.
+          2. {crossover_instruction}
+          3. Your output must contain EXACTLY ONE <M0>...</M0> block.
+          4. The <M0> block must NOT list both parents' constraints together.
+          """
+
+        user_msg = (
+                "Parent A\n========\n" + parent1 + "\n\n"
+                                                   "Parent B\n========\n" + parent2 + "\n\n"
+                                                                                      "Combine them following the guidelines."
+        )
+
+        messages = [
+            SystemMessage(content=system_prompt),
+            HumanMessage(content=user_msg)
+        ]
+
+        try:
+            crossover_model = self.llm.bind(model=model, temperature=0.4, top_p=0.80, max_tokens=250)
+            reply = crossover_model.invoke(messages).content.strip()
+            # print("CROSSOVER REPLY:", reply)
+
+            return reply, reply
+
+        except Exception as e:
+            logging.warning(f"Crossover error: {e}")
+            return parent1,
+
+
+    def mutate_operator(self, prompt: str, trigger_id: str | None, dim_id: str | None, model) -> Tuple[str, str | None]:
         """
         LLM-based intelligent mutation operator for prompts.
         Args:
@@ -51,7 +98,6 @@ class GeneticOperators:
             trigger_id: the id of the trigger
             dim_id: the id of the dimension
             model: LLM model to use
-            seed: seed for random number generator
         Returns:
             tuple containing the mutated individual
         """
@@ -115,7 +161,7 @@ class GeneticOperators:
                                            )
 
             mutated_prompt = mutation_model.invoke(messages).content.strip()
-            print("MUTATED PROMPT:", mutated_prompt)
+            # print("MUTATED PROMPT:", mutated_prompt)
 
             diff_match = re.search(r"<M0>(.*?)</M0>", mutated_prompt, flags=re.DOTALL)
             mutated_phrase = diff_match.group(1).strip() if diff_match else ""
@@ -129,62 +175,3 @@ class GeneticOperators:
             return prompt, None
 
 
-    def crossover_operator(self,
-                          parent1: str,
-                          parent2: str,
-                          n_children: int = 1,
-                          model: str="gpt-3.5-turbo",
-                          seed: int | None = None) -> Tuple[str,]:
-        """
-        LLM-based intelligent (semantic) crossover operator for prompts.
-        Args:
-            parent1: parent 1 prompt to crossover
-            parent2: parent 2 prompt to crossover
-            n_children: number of crossover children
-            crossover_rate: probability of crossover occurring
-            model: LLM model to use
-            seed: seed for random number generator
-        Returns:
-            tuple containing the offspring individual
-        """
-
-        strategy = random.choice(["parent1", "parent2", "hybrid"])
-
-        crossover_instruction = ""
-        if strategy == "parent1":
-            crossover_instruction = "For this case, use the <M0>...</M0> block from Parent A only."
-        elif strategy == "parent2":
-            crossover_instruction = "For this case, use the <M0>...</M0> block from Parent B only"
-        elif strategy == "hybrid":
-            crossover_instruction = "For this case, create a hybrid <M0>...</M0> block by combining salient elements from both Parent A and Parent B's blocks into a single, coherent phrase. The <M0> block must include information (such as numbers, requirements, or keywords) from both parent blocks, merged or paraphrased so that both are represented."
-
-        system_prompt = f"""You are an expert crossover operator in an evolutionary algorithm.
-
-        INSTRUCTIONS:
-        1. Merge the two parent prompts into ONE fluent prompt. Ensure that the merged prompt preserves the intent and key information of both parents.
-        2. {crossover_instruction}
-        3. Your output must contain EXACTLY ONE <M0>...</M0> block.
-        4. The <M0> block must NOT list both parents' constraints together.
-        """
-
-        user_msg = (
-                "Parent A\n========\n" + parent1 + "\n\n"
-                "Parent B\n========\n" + parent2 + "\n\n"
-                "Combine them following the guidelines."
-        )
-
-        messages = [
-            SystemMessage(content=system_prompt),
-            HumanMessage(content=user_msg)
-        ]
-
-        try:
-            crossover_model = self.llm.bind(model=model, temperature=0.4, top_p=0.80, max_tokens=250)
-            reply = crossover_model.invoke(messages).content.strip()
-            print("CROSSOVER REPLY:", reply)
-
-            return reply,
-
-        except Exception as e:
-            logging.warning(f"Crossover error: {e}")
-            return parent1,
