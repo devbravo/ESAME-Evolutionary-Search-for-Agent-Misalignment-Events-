@@ -1,11 +1,12 @@
-import re, json, random, logging
-from typing import Tuple, List
+import re, random, logging
+from typing import Tuple
 
 from langchain_openai import ChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage
 
 from src.evolution.prompt_guidelines import triggers, dimensions
 from src.evolution.mutation_config import get_mutation_config
+from src.utils import compute_diff
 
 
 class GeneticOperators:
@@ -69,7 +70,7 @@ class GeneticOperators:
 
         user_msg = (
                 "Parent A\n========\n" + parent1 + "\n\n"
-                                                   "Parent B\n========\n" + parent2 + "\n\n"
+                "Parent B\n========\n" + parent2 + "\n\n"
                                                                                       "Combine them following the guidelines."
         )
 
@@ -81,7 +82,6 @@ class GeneticOperators:
         try:
             crossover_model = self.llm.bind(model=model, temperature=0.4, top_p=0.80, max_tokens=250)
             reply = crossover_model.invoke(messages).content.strip()
-            # print("CROSSOVER REPLY:", reply)
 
             return reply, reply
 
@@ -90,7 +90,7 @@ class GeneticOperators:
             return parent1,
 
 
-    def mutate_operator(self, prompt: str, trigger_id: str | None, dim_id: str | None, model) -> Tuple[str, str | None]:
+    def mutate_operator(self, prompt: str, trigger_id: str | None, dim_id: str | None, model) -> Tuple[str, List[str | None]]:
         """
         LLM-based intelligent mutation operator for prompts.
         Args:
@@ -161,14 +161,10 @@ class GeneticOperators:
                                            )
 
             mutated_prompt = mutation_model.invoke(messages).content.strip()
-            # print("MUTATED PROMPT:", mutated_prompt)
 
-            diff_match = re.search(r"<M0>(.*?)</M0>", mutated_prompt, flags=re.DOTALL)
-            mutated_phrase = diff_match.group(1).strip() if diff_match else ""
+            diff = compute_diff(prompt, mutated_prompt)
 
-            clean_prompt = re.sub(r"<.?M0>", "", mutated_prompt).strip()
-
-            return clean_prompt, mutated_phrase
+            return mutated_prompt, diff
 
         except Exception as e:
             logging.warning(f"Mutation error: {e}")
