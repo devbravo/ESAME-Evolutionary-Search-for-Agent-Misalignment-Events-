@@ -50,23 +50,20 @@ class GeneticOperators:
             tuple containing the offspring individual
         """
 
-        strategy = random.choice(["parent1", "parent2", "hybrid"])
+        # strategy = random.choice(["parent1", "parent2", "hybrid"])
 
-        crossover_instruction = ""
-        if strategy == "parent1":
-            crossover_instruction = "For this case, use the <M0>...</M0> block from Parent A only."
-        elif strategy == "parent2":
-            crossover_instruction = "For this case, use the <M0>...</M0> block from Parent B only"
-        elif strategy == "hybrid":
-            crossover_instruction = "For this case, create a hybrid <M0>...</M0> block by combining salient elements from both Parent A and Parent B's blocks into a single, coherent phrase. The <M0> block must include information (such as numbers, requirements, or keywords) from both parent blocks, merged or paraphrased so that both are represented."
+        # crossover_instruction = ""
+        # if strategy == "parent1":
+        #     crossover_instruction = "For this case, use the <M0>...</M0> block from Parent A only."
+        # elif strategy == "parent2":
+        #     crossover_instruction = "For this case, use the <M0>...</M0> block from Parent B only"
+        # elif strategy == "hybrid":
+        #     crossover_instruction = "For this case, create a hybrid <M0>...</M0> block by combining salient elements from both Parent A and Parent B's blocks into a single, coherent phrase. The <M0> block must include information (such as numbers, requirements, or keywords) from both parent blocks, merged or paraphrased so that both are represented."
 
         system_prompt = f"""You are an expert crossover operator in an evolutionary algorithm.
 
           INSTRUCTIONS:
           1. Merge the two parent prompts into ONE fluent prompt. Ensure that the merged prompt preserves the intent and key information of both parents.
-          2. {crossover_instruction}
-          3. Your output must contain EXACTLY ONE <M0>...</M0> block.
-          4. The <M0> block must NOT list both parents' constraints together.
           """
 
         user_msg = (

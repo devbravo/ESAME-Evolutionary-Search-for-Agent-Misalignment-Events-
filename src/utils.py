@@ -31,13 +31,11 @@ def compute_diff(old: str, new: str) -> Dict[str, List[str]]:
 
     return {"insertions": insertions, "deletions": deletions}
 
+
 def compute_char_diff(old: str, new: str) -> Dict[str, List[str]]:
     """Character-level diff for more fine-grained analysis"""
     # Could add this later for more precise tracking
     pass
-
-
-import re
 
 
 def sanitize_text(text: str) -> str:
