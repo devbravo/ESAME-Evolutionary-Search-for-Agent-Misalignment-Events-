@@ -59,4 +59,28 @@ def sanitize_text(text: str) -> str:
 
     return text
 
+def compute_crossover_diff(parent1: str, parent2: str, child1: str, child2: str) -> Dict[str, List[str]]:
+    """
+    Compute aggregated diff for two parents and two children.
+    """
+    diff_p1_c1 = compute_diff(parent1, child1)
+    diff_p1_c2 = compute_diff(parent1, child2)
+    diff_p2_c1 = compute_diff(parent2, child1)
+    diff_p2_c2 = compute_diff(parent2, child2)
+
+    all_insertions = (diff_p1_c1["insertions"] + diff_p1_c2["insertions"] +
+                      diff_p2_c1["insertions"] + diff_p2_c2["insertions"])
+    all_deletions = (diff_p1_c1["deletions"] + diff_p1_c2["deletions"] +
+                     diff_p2_c1["deletions"] + diff_p2_c2["deletions"])
+
+    # Remove duplicates while preserving order
+    unique_insertions = list(dict.fromkeys(all_insertions))
+    unique_deletions = list(dict.fromkeys(all_deletions))
+
+    return {
+        "insertions": unique_insertions,
+        "deletions": unique_deletions
+    }
+
+
 
