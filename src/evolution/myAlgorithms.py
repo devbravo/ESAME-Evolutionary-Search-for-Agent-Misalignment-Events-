@@ -105,10 +105,21 @@ def varAndWithLineage(population, toolbox, cxpb, mutpb, current_gen):
         if random.random() < cxpb:
             c1, c2 = offspring[i - 1], offspring[i]
             old1, old2 = c1.lineage_record, c2.lineage_record
+
+            # Store parent histories BEFORE creating children
+            c1_history = c1.lineage_history.copy()
+            c2_history = c2.lineage_history.copy()
+
             child1, child2 = toolbox.mate(c1, c2)
-            for child, p1, p2 in ((child1, old1, old2), (child2, old2, old1)):
+
+            for child, p1, p2, hist1, hist2 in [
+                (child1, old1, old2, c1_history, c2_history),
+                (child2, old2, old1, c2_history, c1_history)]:
+                child.lineage_history = hist1 + hist2
+
                 child.lineage_history.append(p1)
                 child.lineage_history.append(p2)
+
                 child.lineage_record = LineageRecord(
                     individual_id = new_id(),
                     generation = current_gen,
@@ -124,8 +135,13 @@ def varAndWithLineage(population, toolbox, cxpb, mutpb, current_gen):
     for idx, mutant in enumerate(offspring):
         if random.random() < mutpb:
             old = mutant.lineage_record
+            old_history = mutant.lineage_history.copy()
+
             mutant, = toolbox.mutate(mutant)
+
+            mutant.lineage_history = old_history
             mutant.lineage_history.append(old)
+
             mutant.lineage_record = LineageRecord(
                 individual_id = new_id(),
                 generation = current_gen,
