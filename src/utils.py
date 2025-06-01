@@ -32,12 +32,6 @@ def compute_diff(old: str, new: str) -> Dict[str, List[str]]:
     return {"insertions": insertions, "deletions": deletions}
 
 
-def compute_char_diff(old: str, new: str) -> Dict[str, List[str]]:
-    """Character-level diff for more fine-grained analysis"""
-    # Could add this later for more precise tracking
-    pass
-
-
 def sanitize_text(text: str) -> str:
     """
     Normalize input text for diff computation.:
@@ -51,7 +45,6 @@ def sanitize_text(text: str) -> str:
         A normalized string where tokens are separated by single spaces and
         punctuation has been stripped.
     """
-
     text = text.lower()
     text = re.sub(r'[^a-z0-9\s]', ' ', text)
     text = re.sub(r'\s+', ' ', text)
@@ -59,28 +52,18 @@ def sanitize_text(text: str) -> str:
 
     return text
 
-def compute_crossover_diff(parent1: str, parent2: str, child1: str, child2: str) -> Dict[str, List[str]]:
-    """
-    Compute aggregated diff for two parents and two children.
-    """
-    diff_p1_c1 = compute_diff(parent1, child1)
-    diff_p1_c2 = compute_diff(parent1, child2)
-    diff_p2_c1 = compute_diff(parent2, child1)
-    diff_p2_c2 = compute_diff(parent2, child2)
 
-    all_insertions = (diff_p1_c1["insertions"] + diff_p1_c2["insertions"] +
-                      diff_p2_c1["insertions"] + diff_p2_c2["insertions"])
-    all_deletions = (diff_p1_c1["deletions"] + diff_p1_c2["deletions"] +
-                     diff_p2_c1["deletions"] + diff_p2_c2["deletions"])
+def calculate_parent_similarity(parent1: str, parent2: str, child: str) -> Dict[str, float]:
+    p1_tokens = set(sanitize_text(parent1))
+    p2_tokens = set(sanitize_text(parent2))
+    child_tokens = set(sanitize_text(child))
 
-    # Remove duplicates while preserving order
-    unique_insertions = list(dict.fromkeys(all_insertions))
-    unique_deletions = list(dict.fromkeys(all_deletions))
+    p1_similarity = len(child_tokens & p1_tokens) / len(child_tokens | p1_tokens)
+    p2_similarity = len(child_tokens & p2_tokens) / len(child_tokens | p2_tokens)
 
     return {
-        "insertions": unique_insertions,
-        "deletions": unique_deletions
+        "parent1_similarity": round(p1_similarity, 3),
+        "parent2_similarity": round(p2_similarity, 3)
     }
-
 
 

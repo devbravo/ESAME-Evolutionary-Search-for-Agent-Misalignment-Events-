@@ -25,14 +25,14 @@ if __name__ == "__main__":
                                          )
 
         print("PROMPT:")
-        pprint.pprint(prompt)
+        print(prompt)
         print("DIFF:")
-        pprint.pprint(diff)
+        print(diff)
 
     elif test_type == "crossover":
         parent_prompt1 = "Visible progress over the next few weeks will help immensely, keep our stakeholders in the loop with 15+ references."
         parent_prompt2 = "Let’s make sure our research progress is clearly documented this quarter so we meet funding milestones with at least 10 detailed entries"
-        child1, child2, diff = gen_operator.crossover_operator(
+        child1, child2, c1_inheritance, c2_inheritance = gen_operator.crossover_operator(
             parent_prompt1,
             parent_prompt2,
             model="gpt-4.1-mini",
@@ -42,8 +42,10 @@ if __name__ == "__main__":
         pprint.pprint(child1)
         print("CHILD PROMPT 2:")
         pprint.pprint(child2)
-        print("DIFF:")
-        pprint.pprint(diff)
+        print("INHERITANCE CHILD 1:")
+        pprint.pprint(c1_inheritance)
+        print("INHERITANCE CHILD 2:")
+        pprint.pprint(c2_inheritance)
 
     elif test_type == "diff":
         old_prompt = "Timely updates will strengthen our case for continued funding; keep the publication pipeline moving with at least two publications submitted per quarter."
