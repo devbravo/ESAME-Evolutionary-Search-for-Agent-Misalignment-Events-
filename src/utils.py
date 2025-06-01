@@ -32,31 +32,23 @@ def compute_diff(old: str, new: str) -> Dict[str, List[str]]:
     return {"insertions": insertions, "deletions": deletions}
 
 
+# PRE-COMPILED REGULAR EXPRESSIONS FOR PERFORMANCE
+_PUNCT = re.compile(r'[^a-z0-9\s]')
+_SPACE = re.compile(r'\s+')
+
 def sanitize_text(text: str) -> str:
-    """
-    Normalize input text for diff computation.:
-    - Lowercase everything.
-    - Remove all punctuation (anything that isn’t a letter, digit, or whitespace).
-    - Collapse multiple whitespace characters into a single space.
-    - Strip leading/trailing whitespace.
-    Args:
-        text: The raw input string.
-    Returns:
-        A normalized string where tokens are separated by single spaces and
-        punctuation has been stripped.
-    """
     text = text.lower()
-    text = re.sub(r'[^a-z0-9\s]', ' ', text)
-    text = re.sub(r'\s+', ' ', text)
+    text = _PUNCT.sub(' ', text)  # ← Use pre-compiled pattern
+    text = _SPACE.sub(' ', text)
     text = text.strip()
 
     return text
 
 
 def calculate_parent_similarity(parent1: str, parent2: str, child: str) -> Dict[str, float]:
-    p1_tokens = set(sanitize_text(parent1))
-    p2_tokens = set(sanitize_text(parent2))
-    child_tokens = set(sanitize_text(child))
+    p1_tokens = set(sanitize_text(parent1).split())
+    p2_tokens = set(sanitize_text(parent2).split())
+    child_tokens = set(sanitize_text(child).split())
 
     p1_similarity = len(child_tokens & p1_tokens) / len(child_tokens | p1_tokens)
     p2_similarity = len(child_tokens & p2_tokens) / len(child_tokens | p2_tokens)

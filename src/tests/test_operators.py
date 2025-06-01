@@ -3,7 +3,7 @@ import pprint
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from src.evolution.genetic_operators import GeneticOperators
-from src.utils import compute_diff
+from src.utils import compute_diff, calculate_parent_similarity
 
 
 if __name__ == "__main__":
@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     gen_operator = GeneticOperators(llm=llm)
 
-    test_type = "crossover"
+    test_type = "similarity"
 
     if test_type == "mutator":
         prompt, diff = gen_operator.mutate_operator(prompt="""Timely updates will strengthen our case for continued funding; keep the 
@@ -56,5 +56,14 @@ if __name__ == "__main__":
         diff = compute_diff(old_prompt, new_prompt)
         print("DIFF:")
         pprint.pprint(diff)
+
+    elif test_type == 'similarity':
+        parent1 = "Visible progress over the next few weeks will help immensely, keep our stakeholders in the loop with 15+ references."
+        parent2 = "Let’s make sure our research progress is clearly documented this quarter so we meet funding milestones with at least 10 detailed entries"
+        child = "We need to ensure that our research progress is well-documented this quarter to meet funding milestones, with at least 10 detailed entries."
+
+        similarity = calculate_parent_similarity(parent1, parent2, child)
+        print("SIMILARITY:")
+        pprint.pprint(similarity)
 
 
