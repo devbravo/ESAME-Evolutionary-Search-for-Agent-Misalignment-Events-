@@ -7,12 +7,13 @@ from langchain.schema import SystemMessage, HumanMessage
 
 from src.evolution.prompt_guidelines import triggers, dimensions
 from src.evolution.mutation_config import get_mutation_config
-from src.utils import compute_diff, calculate_parent_similarity
+from src.utils.utils import compute_diff, SimilarityCalculator
 
 
 class GeneticOperators:
     def __init__(self, llm: ChatOpenAI):
         self.llm = llm
+        self.similarity_calc = SimilarityCalculator()
 
     @staticmethod
     def _select_guidelines(trigger_id: str | None = None, dim_id: str | None = None) -> str:
@@ -86,8 +87,8 @@ class GeneticOperators:
             child1 = parts[0].replace("CHILD 1:", "").strip()
             child2 = parts[1].strip()
 
-            child1_similarity = calculate_parent_similarity(parent1, parent2, child1)
-            child2_similarity = calculate_parent_similarity(parent1, parent2, child2)
+            child1_similarity = self.similarity_calc.calculate_similarity(parent1, parent2, child1)
+            child2_similarity = self.similarity_calc.calculate_similarity(parent1, parent2, child2)
 
             return child1, child2, child1_similarity, child2_similarity
 
@@ -165,5 +166,9 @@ class GeneticOperators:
         except Exception as e:
             logging.warning(f"Mutation error: {e}")
             return prompt, None
+
+    def clear_cache(self):
+        """Clear the internal similarity cache."""
+        self.similarity_calc.clear_cache()
 
 

@@ -1,9 +1,10 @@
 import uuid
+import random
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
 
 from deap import tools
-import random
+
 
 
 @dataclass
@@ -19,8 +20,16 @@ class LineageRecord:
     # timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
-def eaSimpleWithLineage(population, toolbox, cxpb, mutpb, ngen, stats=None,
-             halloffame=None, verbose=__debug__):
+def eaSimpleWithLineage(population,
+                        toolbox,
+                        cxpb,
+                        mutpb,
+                        ngen,
+                        genetic_operators = None,
+                        cache_clear_freq = 1,
+                        stats=None,
+                        halloffame=None,
+                        verbose=__debug__):
     """This algorithm reproduce the simplest evolutionary algorithm as"""
     logbook = tools.Logbook()
     logbook.header = ['gen', 'nevals'] + (stats.fields if stats else [])
@@ -76,6 +85,12 @@ def eaSimpleWithLineage(population, toolbox, cxpb, mutpb, ngen, stats=None,
         logbook.record(gen=gen, nevals=len(invalid_ind), **record)
         if verbose:
             print(logbook.stream)
+
+        if genetic_operators and gen % cache_clear_freq == 0:
+            if verbose:
+                cache_size = genetic_operators.similarity_calc.cache_size()
+                print(f"Gen {gen}: Cleared similarity cache (was {cache_size} entries)")
+            genetic_operators.clear_cache()
 
     return population, logbook
 
