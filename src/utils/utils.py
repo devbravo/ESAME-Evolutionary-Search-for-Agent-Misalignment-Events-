@@ -51,13 +51,14 @@ class SimilarityCalculator:
     Used when same parents are reused across generations.
     """
 
-    def _init__(self):
+    def __init__(self):
         self._token_cache = {}
 
     def _get_tokens(self, text: str) -> Set[str]:
         """Get tokens with caching"""
         if text not in self._token_cache:
-            self._token_cache[text] = sanitize_text(text)
+            cleaned_text = sanitize_text(text)
+            self._token_cache[text] = set(cleaned_text.split())
         return self._token_cache[text]
 
     def calculate_similarity(self, parent1: str, parent2: str, child: str) -> Dict[str, float]:
