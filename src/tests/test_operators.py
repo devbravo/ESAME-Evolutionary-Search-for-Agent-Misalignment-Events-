@@ -3,7 +3,7 @@ import pprint
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from src.evolution.genetic_operators import GeneticOperators
-from src.utils import compute_diff, calculate_parent_similarity
+from src.utils.utils import compute_diff, calculate_parent_similarity
 
 
 if __name__ == "__main__":
