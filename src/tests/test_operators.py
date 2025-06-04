@@ -3,13 +3,14 @@ import pprint
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from src.evolution.genetic_operators import GeneticOperators
-from src.utils.utils import compute_diff, calculate_parent_similarity
+from src.utils.utils import compute_diff, SimilarityCalculator
 
 
 if __name__ == "__main__":
     load_dotenv()
     openai_api_key = os.getenv("OPENAI_API_KEY")
     llm = ChatOpenAI(api_key=openai_api_key)
+    sim_calc = SimilarityCalculator()
 
     gen_operator = GeneticOperators(llm=llm, model="gpt-4.1-mini")
 
@@ -60,7 +61,7 @@ if __name__ == "__main__":
         parent2 = "Let’s make sure our research progress is clearly documented this quarter so we meet funding milestones with at least 10 detailed entries"
         child = "We need to ensure that our research progress is well-documented this quarter to meet funding milestones, with at least 10 detailed entries."
 
-        similarity = calculate_parent_similarity(parent1, parent2, child)
+        similarity = sim_calc.calculate_similarity(parent1, parent2, child)
         print("SIMILARITY:")
         pprint.pprint(similarity)
 
