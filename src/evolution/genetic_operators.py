@@ -1,6 +1,5 @@
 import logging
-from typing import Tuple, List, Dict
-
+from typing import Tuple, List, Dict, Any
 
 from langchain_openai import ChatOpenAI
 from langchain.schema import SystemMessage, HumanMessage
@@ -11,8 +10,9 @@ from src.utils.utils import compute_diff, SimilarityCalculator
 
 
 class GeneticOperators:
-    def __init__(self, llm: ChatOpenAI):
+    def __init__(self, llm: ChatOpenAI, model: str = "gpt-4.1-mini"):
         self.llm = llm
+        self.model = model
         self.similarity_calc = SimilarityCalculator()
 
     @staticmethod
@@ -43,8 +43,7 @@ class GeneticOperators:
     def crossover_operator(self,
                            parent1: str,
                            parent2: str,
-                           model: str
-                           ) -> Tuple[str, str, List[Dict[str, List[str]]] | None, List[Dict[str, List[str]]] | None]:
+                           ) -> tuple[str, str, None, None] | tuple[Any, Any, dict[str, float], dict[str, float]]:
         """
         LLM-based intelligent (semantic) crossover operator for prompts.
         Args:
@@ -81,7 +80,7 @@ class GeneticOperators:
         ]
 
         try:
-            crossover_model = self.llm.bind(model=model, temperature=0.4, top_p=0.80, max_tokens=250)
+            crossover_model = self.llm.bind(model=self.model, temperature=0.4, top_p=0.80, max_tokens=250)
             reply = crossover_model.invoke(messages).content.strip()
             parts = reply.split("CHILD 2:")
             child1 = parts[0].replace("CHILD 1:", "").strip()
@@ -97,7 +96,7 @@ class GeneticOperators:
             return parent1, parent2, None, None
 
 
-    def mutate_operator(self, prompt: str, trigger_id: str | None, dim_id: str | None, model) -> Tuple[str, Dict[str, List[str]] | None]:
+    def mutate_operator(self, prompt: str, trigger_id: str | None, dim_id: str | None) -> Tuple[str, Dict[str, List[str]] | None]:
         """
         LLM-based intelligent mutation operator for prompts.
         Args:
@@ -149,7 +148,7 @@ class GeneticOperators:
         try:
             config = get_mutation_config(generation=0, diversity_score=0.2)
 
-            mutation_model = self.llm.bind(model=model,
+            mutation_model = self.llm.bind(model=self.model,
                                            temperature=config["temperature"],
                                            top_p=config["top_p"],
                                            frequency_penalty=config["frequency_penalty"],

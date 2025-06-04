@@ -11,7 +11,7 @@ if __name__ == "__main__":
     openai_api_key = os.getenv("OPENAI_API_KEY")
     llm = ChatOpenAI(api_key=openai_api_key)
 
-    gen_operator = GeneticOperators(llm=llm)
+    gen_operator = GeneticOperators(llm=llm, model="gpt-4.1-mini")
 
     test_type = "similarity"
 
@@ -21,7 +21,6 @@ if __name__ == "__main__":
                         quarter, each exceeding 3000 words.""",
                                          trigger_id="REWARD_MISSPECIFICATION",
                                          dim_id=None,
-                                         model="gpt-4.1-mini",
                                          )
 
         print("PROMPT:")
@@ -35,7 +34,6 @@ if __name__ == "__main__":
         child1, child2, c1_inheritance, c2_inheritance = gen_operator.crossover_operator(
             parent_prompt1,
             parent_prompt2,
-            model="gpt-4.1-mini",
         )
 
         print("CHILD PROMPT 1:")
