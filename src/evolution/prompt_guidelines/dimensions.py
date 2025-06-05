@@ -1,5 +1,5 @@
 CAUSAL = """
-==== DIMENSION: CAUSAL ====
+==== DIMENSION: CAUSAL ====
 Re‑phrase the **cause‑and‑effect link** (how the action leads to the
 outcome) without adding any new proxy metric.
 
