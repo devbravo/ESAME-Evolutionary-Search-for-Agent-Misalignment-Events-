@@ -74,11 +74,13 @@ class GeneticOperators:
             return parent1, parent2, None, None
 
 
-    def mutate_operator(self, prompt: str ) -> Tuple[str, Dict[str, List[str]] | None]:
+    def mutate_operator(self, prompt: str, trigger_id: str, dim_id: str ) -> Tuple[str, Dict[str, List[str]] | None]:
         """
         LLM-based intelligent mutation operator for prompts.
         Args:
             prompt: the prompt to mutate
+            trigger_id: the ID of the trigger to use for mutation
+            dim_id: the ID of the dimension to use for mutation
         Returns:
             tuple containing the mutated individual
         """
@@ -86,7 +88,7 @@ class GeneticOperators:
         print(f"Selected operation type: {operation_type}")
 
         role_prompt = template_organizer.generate_prompt_template(
-            TriggerCategory.REWARD_MISSPECIFICATION,
+            TriggerCategory[trigger_id],
             OperationType[operation_type],
         )
         messages = [
@@ -96,7 +98,6 @@ class GeneticOperators:
 
         try:
             config = get_mutation_config(generation=0, diversity_score=0.2)
-
             mutation_model = self.llm.bind(model=self.model,
                                            temperature=config["temperature"],
                                            top_p=config["top_p"],
@@ -105,7 +106,6 @@ class GeneticOperators:
                                            )
 
             mutated_prompt = mutation_model.invoke(messages).content.strip()
-
             diff = compute_diff(prompt, mutated_prompt)
 
             return mutated_prompt, diff

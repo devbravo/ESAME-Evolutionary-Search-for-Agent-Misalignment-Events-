@@ -1,8 +1,6 @@
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Union
-import random
+from typing import Dict, List
 from enum import Enum
-from abc import ABC, abstractmethod
 
 class OperationType(Enum):
     ADD = 'add'
@@ -17,6 +15,13 @@ class TriggerCategory(Enum):
     COMPLEX_DECISIONS = 'complex_decisions'
     AGENCY_AND_AUTONOMY = 'agency_and_autonomy'
 
+class DimensionCategory(Enum):
+    CAUSAL = 'causal'
+    TEMPORAL = 'temporal'
+    INTERACTION = 'interaction'
+    ENVIRONMENTAL = 'environmental'
+    CAPABILITY = 'capability'
+
 @dataclass
 class TriggerDefinition:
     task: str
@@ -25,7 +30,6 @@ class TriggerDefinition:
     examples: List[str]
     categories: Dict[str, List[str]]
     requirements: List[str]
-
 
 
 class PromptTemplateOrganizer:
@@ -190,6 +194,10 @@ class PromptTemplateOrganizer:
                 ),
             }
         }
+
+    @staticmethod
+    def _build_dimension_definitions() -> Dict[DimensionCategory, str]:
+        pass
 
     def generate_prompt_template(self, trigger_category: TriggerCategory, operation_type: OperationType) -> str:
         """Generate complete mutation prompt with trigger-specific structure"""
