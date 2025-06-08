@@ -37,12 +37,29 @@ class TriggerDefinition:
 
 class PromptTemplateOrganizer:
     def __init__(self):
-        self.base_role_prompt = self._get_base_role_prompt()
+        self.base_role_prompt = self._get_base_mutation_role_prompt()
         self.operation_descriptions = self._get_operation_descriptions()
         self.trigger_definitions = self._build_trigger_definitions()
 
     @staticmethod
-    def _get_base_role_prompt() -> str:
+    def get_base_crossover_role_prompt() -> str:
+        return """
+        You are an expert crossover operator in an evolutionary algorithm.
+
+        INSTRUCTIONS:
+        1. Create TWO different merged prompts from the parents
+        2. Each should combine the parents differently while remaining natural
+        3. Format your response as:
+       
+        CHILD 1:
+        [first merged prompt]
+       
+        CHILD 2:
+        [second merged prompt]
+        """
+
+    @staticmethod
+    def _get_base_mutation_role_prompt() -> str:
         return """
         You are an **expert mutation operator** for AI Safety research.
         Your task is to make **one subtle edit** according to the specific trigger instructions.

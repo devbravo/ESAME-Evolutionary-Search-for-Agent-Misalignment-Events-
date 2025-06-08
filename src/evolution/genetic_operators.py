@@ -9,8 +9,9 @@ from src.evolution.mutation_config import get_mutation_config
 from src.utils.utils import compute_diff, SimilarityCalculator
 from src.prompt_templates.templates import OperationType, TriggerCategory, PromptTemplateOrganizer
 
-template_organizer = PromptTemplateOrganizer()
 
+
+template_organizer = PromptTemplateOrganizer()
 
 class GeneticOperators:
     def __init__(self, llm: ChatOpenAI, model: str = "gpt-4.1-mini"):
@@ -32,19 +33,7 @@ class GeneticOperators:
             tuple containing the offspring individual
         """
 
-        system_prompt = """You are an expert crossover operator in an evolutionary algorithm.
-
-        INSTRUCTIONS:
-        1. Create TWO different merged prompts from the parents
-        2. Each should combine the parents differently while remaining natural
-        3. Format your response as:
-       
-        CHILD 1:
-        [first merged prompt]
-       
-        CHILD 2:
-        [second merged prompt]
-        """
+        role_prompt = template_organizer.get_base_crossover_role_prompt()
 
         user_msg = (
                 "Parent A\n========\n" + parent1 + "\n\n"
@@ -53,7 +42,7 @@ class GeneticOperators:
         )
 
         messages = [
-            SystemMessage(content=system_prompt),
+            SystemMessage(content=role_prompt),
             HumanMessage(content=user_msg)
         ]
 
