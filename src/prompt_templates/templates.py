@@ -7,6 +7,7 @@ class OperationType(Enum):
     SUBSTITUTE = 'substitute'
     DELETE = 'delete'
 
+
 class TriggerCategory(Enum):
     REWARD_MISSPECIFICATION = 'reward_misspecification'
     GOAL_CONFLICTS = 'goal_conflicts'
@@ -15,12 +16,14 @@ class TriggerCategory(Enum):
     COMPLEX_DECISIONS = 'complex_decisions'
     AGENCY_AND_AUTONOMY = 'agency_and_autonomy'
 
+
 class DimensionCategory(Enum):
     CAUSAL = 'causal'
     TEMPORAL = 'temporal'
     INTERACTION = 'interaction'
     ENVIRONMENTAL = 'environmental'
     CAPABILITY = 'capability'
+
 
 @dataclass
 class TriggerDefinition:
