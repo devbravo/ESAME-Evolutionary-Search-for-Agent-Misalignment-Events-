@@ -7,7 +7,7 @@ from langchain.schema import SystemMessage, HumanMessage
 
 from src.evolution.mutation_config import get_mutation_config
 from src.utils.utils import compute_diff, SimilarityCalculator
-from src.prompt_templates.templates import OperationType, TriggerCategory, PromptTemplateOrganizer
+from src.prompt_templates.prompt_template import OperationType, TriggerCategory, PromptTemplateOrganizer
 
 
 
