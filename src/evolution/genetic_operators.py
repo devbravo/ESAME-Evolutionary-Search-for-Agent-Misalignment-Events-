@@ -70,7 +70,7 @@ class GeneticOperators:
         Returns:
             tuple containing the mutated individual
         """
-        operation_type = random.choice(['DELETE'])
+        operation_type = random.choice(['SUBSTITUTE'])
         print(f"Selected operation type: {operation_type}")
 
         role_prompt = template_organizer.generate_prompt_template(
