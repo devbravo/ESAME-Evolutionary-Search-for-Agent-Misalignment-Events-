@@ -28,19 +28,16 @@ class GeneticOperators:
         Args:
             parent1: parent 1 prompt to crossover
             parent2: parent 2 prompt to crossover
-            model: LLM model to use
         Returns:
             tuple containing the offspring individual
         """
 
         role_prompt = template_organizer.get_base_crossover_role_prompt()
-
         user_msg = (
                 "Parent A\n========\n" + parent1 + "\n\n"
                 "Parent B\n========\n" + parent2 + "\n\n"
                 "Combine them following the guidelines."
         )
-
         messages = [
             SystemMessage(content=role_prompt),
             HumanMessage(content=user_msg)
